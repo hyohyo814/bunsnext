@@ -3,12 +3,11 @@
 
 import { sql } from "drizzle-orm";
 import {
-  bigint,
-  mysqlTableCreator,
-  timestamp,
+  sqliteTableCreator,
   uniqueIndex,
-  varchar,
-} from "drizzle-orm/mysql-core";
+  int,
+  text,
+} from "drizzle-orm/sqlite-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -16,19 +15,15 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const mysqlTable = mysqlTableCreator((name) => `bunsnext_${name}`);
+export const mysqlTable = sqliteTableCreator((name) => `bunsnext_${name}`);
 
-export const example = mysqlTable(
-  "example",
+export const something = mysqlTable(
+  "something",
   {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
+    id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    name: text("name", { length: 256 }),
   },
-  (example) => ({
-    nameIndex: uniqueIndex("name_idx").on(example.name),
+  (something) => ({
+    nameIndex: uniqueIndex("name_idx").on(something.name),
   })
 );
